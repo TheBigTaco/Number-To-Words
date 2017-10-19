@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using Rename.Models;
+using NumToWord.Models;
 
-namespace Rename.Controllers
+namespace NumToWord.Controllers
 {
     public class HomeController : Controller
     {
