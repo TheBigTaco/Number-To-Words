@@ -20,6 +20,10 @@ namespace NumToWord.Models
     public string NumberConvert(Translator input)
     {
       long number = long.Parse(input.Input);
+      if (number > 999999999999)
+      {
+        return "sorry";
+      }
       number = input.SuffixConvert(number);
       number = input.TensConvert(number);
       Output += _belowTwenty[number];
@@ -43,14 +47,52 @@ namespace NumToWord.Models
     }
     public long SuffixConvert(long number)
     {
-      if (number >= 100 && number <= 1000)
+      long newNumber = number;
+      for (int i = 1000000000; i > 4; i/=1000) {
+        if (newNumber >= i)
+        {
+          long amountOf = (long)Math.Floor((decimal)newNumber/i);
+          if(amountOf >= 20 && amountOf < 100)
+          {
+            long tens = TensConvert(amountOf);
+            if(tens == 0){
+              newNumber = newNumber - (amountOf * i);
+              Output += _suffix[i];
+              break;
+            }
+          }
+          if(amountOf > 100)
+          {
+            long hundreds = SuffixConvert(amountOf);
+            if (hundreds == 0)
+            {
+              newNumber = newNumber - (amountOf * i);
+              Output += _suffix[i];
+              break;
+            }
+            if (hundreds >= 20)
+            {
+              long tens = TensConvert(hundreds);
+              if(tens == 0){
+                newNumber = newNumber - (amountOf * i);
+                Output += _suffix[i];
+                break;
+              }
+            }
+          }
+          Output += _belowTwenty[amountOf];
+          Output += _suffix[i];
+          newNumber = newNumber - (amountOf * i);
+        }
+      }
+      if (newNumber >= 100)
       {
-        int hundreds = (int)Math.Floor(number/100.0f);
+        int hundreds = (int)Math.Floor(newNumber/100.0f);
         Output += _belowTwenty[hundreds];
         Output += _suffix[100];
-        number = number - hundreds * 100;
+        newNumber = newNumber - hundreds * 100;
       }
-      return number;
+      return newNumber;
     }
   }
 }
