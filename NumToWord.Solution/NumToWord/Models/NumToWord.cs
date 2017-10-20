@@ -20,6 +20,10 @@ namespace NumToWord.Models
     public string NumberConvert(Translator input)
     {
       long number = long.Parse(input.Input);
+      if (number == 0)
+      {
+        return _belowTwenty[number];
+      }
       if (number > 999999999999)
       {
         return "sorry";
@@ -29,7 +33,10 @@ namespace NumToWord.Models
         number = input.SuffixConvert(number);
       }
       number = input.TensConvert(number);
-      Output += _belowTwenty[number];
+      if(number != 0)
+      {
+        Output += _belowTwenty[number];
+      }
       return Output;
     }
 
@@ -41,7 +48,6 @@ namespace NumToWord.Models
       }
       else
       {
-        Console.WriteLine(number);
         int tens = (int)Math.Floor(number/10.0f);
         int newNumber = tens*10;
         Output += _tenMultiples[newNumber];
