@@ -24,7 +24,10 @@ namespace NumToWord.Models
       {
         return "sorry";
       }
-      number = input.SuffixConvert(number);
+      while (number > 99)
+      {
+        number = input.SuffixConvert(number);
+      }
       number = input.TensConvert(number);
       Output += _belowTwenty[number];
       return Output;
@@ -38,6 +41,7 @@ namespace NumToWord.Models
       }
       else
       {
+        Console.WriteLine(number);
         int tens = (int)Math.Floor(number/10.0f);
         int newNumber = tens*10;
         Output += _tenMultiples[newNumber];
@@ -59,6 +63,11 @@ namespace NumToWord.Models
               newNumber = newNumber - (amountOf * i);
               Output += _suffix[i];
               break;
+            } else {
+              Output += _belowTwenty[tens];
+              newNumber = newNumber - (amountOf * i);
+              Output += _suffix[i];
+              break;
             }
           }
           if(amountOf > 100)
@@ -70,10 +79,15 @@ namespace NumToWord.Models
               Output += _suffix[i];
               break;
             }
-            if (hundreds >= 20)
+            if (hundreds >= 20 && hundreds < 100)
             {
               long tens = TensConvert(hundreds);
               if(tens == 0){
+                newNumber = newNumber - (amountOf * i);
+                Output += _suffix[i];
+                break;
+              } else {
+                Output += _belowTwenty[tens];
                 newNumber = newNumber - (amountOf * i);
                 Output += _suffix[i];
                 break;
@@ -85,7 +99,7 @@ namespace NumToWord.Models
           newNumber = newNumber - (amountOf * i);
         }
       }
-      if (newNumber >= 100)
+      if (newNumber >= 100 && newNumber < 1000)
       {
         int hundreds = (int)Math.Floor(newNumber/100.0f);
         Output += _belowTwenty[hundreds];

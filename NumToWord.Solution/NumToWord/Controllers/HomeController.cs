@@ -12,5 +12,12 @@ namespace NumToWord.Controllers
       {
         return View();
       }
+      [HttpPost("/result")]
+      public ActionResult Result()
+      {
+        Translator newTranslator = new Translator(Request.Form["user-input"]);
+        string output = newTranslator.NumberConvert(newTranslator);
+        return View("Result", output);
+      }
     }
 }

@@ -100,5 +100,12 @@ namespace NumToWord.Tests
       string result = "sorry";
       Assert.AreEqual(result, newTranslator.NumberConvert(newTranslator));
     }
+    [TestMethod]
+    public void SuffixNumberConvert_ConvertSpecificNumbers_String()
+    {
+      Translator newTranslator = new Translator("777777777");
+      string result = "SevenHundredSeventySevenMillionSevenHundredSeventySevenThousandSevenHundredSeventySeven";
+      Assert.AreEqual(result, newTranslator.NumberConvert(newTranslator));
+    }
   }
 }
