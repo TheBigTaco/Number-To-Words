@@ -6,9 +6,9 @@ namespace NumToWord.Models
 {
   public class Translator
   {
-    private static Dictionary<long, string> _belowTwenty = new Dictionary<long, string>{{0,"Zero"},{1,"One"},{2,"Two"},{3,"Three"},{4,"Four"},{5,"Five"},{6,"Six"},{7,"Seven"},{8,"Eight"},{9,"Nine"},{10,"Ten"},{11,"Eleven"},{12,"Twelve"},{13,"Thirteen"},{14,"Fourteen"},{15,"Fifteen"},{16,"Sixteen"},{17,"Seventeen"},{18,"Eighteen"},{19,"Nineteen"}};
-    private static Dictionary<long, string> _tenMultiples = new Dictionary<long, string>{{20,"Twenty"},{30,"Thirty"},{40,"Forty"},{50,"Fifty"},{60,"Sixty"},{70,"Seventy"},{80,"Eighty"},{90,"Ninety"}};
-    private static Dictionary<int, string> _suffix = new Dictionary<int, string>{{100,"Hundred"},{1000,"Thousand"},{1000000,"Million"},{1000000000,"Billion"}};
+    private static Dictionary<long, string> _belowTwenty = new Dictionary<long, string>{{0,"Zero"},{1,"One "},{2,"Two "},{3,"Three "},{4,"Four "},{5,"Five "},{6,"Six "},{7,"Seven "},{8,"Eight "},{9,"Nine "},{10,"Ten "},{11,"Eleven "},{12,"Twelve "},{13,"Thirteen "},{14,"Fourteen "},{15,"Fifteen "},{16,"Sixteen "},{17,"Seventeen "},{18,"Eighteen "},{19,"Nineteen "}};
+    private static Dictionary<long, string> _tenMultiples = new Dictionary<long, string>{{20,"Twenty "},{30,"Thirty "},{40,"Forty "},{50,"Fifty "},{60,"Sixty "},{70,"Seventy "},{80,"Eighty "},{90,"Ninety "}};
+    private static Dictionary<int, string> _suffix = new Dictionary<int, string>{{100,"Hundred "},{1000,"Thousand "},{1000000,"Million "},{1000000000,"Billion "}};
     public string Output { get; set; }
     public string Input { get; set; }
 
@@ -26,7 +26,7 @@ namespace NumToWord.Models
       }
       if (number > 999999999999)
       {
-        return "sorry";
+        return "sorry that number is too big";
       }
       while (number > 99)
       {
@@ -55,6 +55,22 @@ namespace NumToWord.Models
         return number;
       }
     }
+    public long TenOfConvert(long number, long baseNum, int i)
+    {
+      if(number >= 20 && number < 100)
+      {
+        long tens = TensConvert(number);
+        if(tens == 0){
+          baseNum = baseNum - (number * i);
+          Output += _suffix[i];
+        } else {
+          Output += _belowTwenty[tens];
+          baseNum = baseNum - (number * i);
+          Output += _suffix[i];
+        }
+      }
+        return baseNum;
+    }
     public long SuffixConvert(long number)
     {
       long newNumber = number;
@@ -64,17 +80,8 @@ namespace NumToWord.Models
           long amountOf = (long)Math.Floor((decimal)newNumber/i);
           if(amountOf >= 20 && amountOf < 100)
           {
-            long tens = TensConvert(amountOf);
-            if(tens == 0){
-              newNumber = newNumber - (amountOf * i);
-              Output += _suffix[i];
-              break;
-            } else {
-              Output += _belowTwenty[tens];
-              newNumber = newNumber - (amountOf * i);
-              Output += _suffix[i];
-              break;
-            }
+            newNumber = TenOfConvert(amountOf, newNumber, i);
+            break;
           }
           if(amountOf > 100)
           {
@@ -85,20 +92,8 @@ namespace NumToWord.Models
               Output += _suffix[i];
               break;
             }
-            if (hundreds >= 20 && hundreds < 100)
-            {
-              long tens = TensConvert(hundreds);
-              if(tens == 0){
-                newNumber = newNumber - (amountOf * i);
-                Output += _suffix[i];
-                break;
-              } else {
-                Output += _belowTwenty[tens];
-                newNumber = newNumber - (amountOf * i);
-                Output += _suffix[i];
-                break;
-              }
-            }
+            newNumber = TenOfConvert(amountOf, newNumber, i);
+            break;
           }
           Output += _belowTwenty[amountOf];
           Output += _suffix[i];

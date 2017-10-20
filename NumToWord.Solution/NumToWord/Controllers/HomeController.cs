@@ -15,9 +15,17 @@ namespace NumToWord.Controllers
       [HttpPost("/result")]
       public ActionResult Result()
       {
-        Translator newTranslator = new Translator(Request.Form["user-input"]);
-        string output = newTranslator.NumberConvert(newTranslator);
-        return View("Result", output);
+        try
+        {
+          Translator newTranslator = new Translator(Request.Form["user-input"]);
+          string output = newTranslator.NumberConvert(newTranslator);
+          return View("Result", output);
+        }
+        catch(Exception)
+        {
+          return View("Result", "I'm sorry I'm afraid I can't let you do that");
+        }
+
       }
     }
 }
